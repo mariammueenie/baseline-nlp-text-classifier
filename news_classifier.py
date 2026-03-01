@@ -2,11 +2,11 @@
 Real Dataset NLP Mini Project: 20 Newsgroups Text Classification (Baseline)
 
 What this does:
-- Loads a real labeled text dataset (20 Newsgroups)
-- Trains a classic NLP baseline (TF-IDF + Linear SVM)
-- Evaluates performance (accuracy + precision/recall/F1)
-- Prints “top indicative terms” per class for interpretability
-- Runs a couple sample predictions
+    Loads a real labeled text dataset (20 Newsgroups)
+    Trains a classic NLP baseline (TF-IDF + Linear SVM)
+    Evaluates performance (accuracy + precision/recall/F1)
+    Prints “top indicative terms” per class for interpretability (in a clean, non-wrapping format)
+    Runs a couple sample predictions
 
 Why this matters:
 TF-IDF + Linear SVM is a strong traditional baseline for topic classification.
@@ -44,7 +44,7 @@ def main():
     # These are chosen to compare different “styles” of language:
     #   politics (argumentative, abstract)
     #   hockey (event + names + team talk)
-    #   AI (technical discussion)
+    #   space (science + engineering vocabulary)
     #   graphics (engineering/CS vocabulary)
     categories = [
         "talk.politics.misc",
@@ -114,28 +114,32 @@ def main():
     # ---------------------------
     # Step 7: “What words is it using?” (Interpretability)
     # ---------------------------
-    # Linear models expose coefficients per feature; we can show the strongest terms per class.
+    # Fix 1: print terms vertically so the terminal doesn't wrap long lines awkwardly.
+    # Fix 2: ensure this section prints only once (no duplicated blocks)
     tfidf = clf.named_steps["tfidf"]
     svm = clf.named_steps["svm"]
     feature_names = tfidf.get_feature_names_out()
 
     print("\nTop indicative terms per class:")
     for i, label in enumerate(data.target_names):
-        # argsort gives indices of features sorted by weight
         top10 = svm.coef_[i].argsort()[-10:][::-1]
-        terms = ", ".join(feature_names[j] for j in top10)
-        print(f"- {label}: {terms}")
+        terms = [feature_names[j] for j in top10]
+
+        print(f"\n{label}")
+        for term in terms:
+            print(f"  - {term}")
 
     # ---------------------------
     # Step 8: Quick demo predictions
     # ---------------------------
+    # Fix 3: add the missing comma after the space sample so two strings don't merge.
     samples = [
         # politics
         "The election debate focused on policy, government spending, and media coverage.",
         # hockey
         "The goalie had an unreal save and the team won in overtime after a tough third period.",
         # space
-        "The spacecraft entered orbit after a successful launch and deployed its satellite payload."
+        "The spacecraft entered orbit after a successful launch and deployed its satellite payload.",
         # graphics
         "The rendering pipeline uses shaders, texture mapping, and anti-aliasing to improve output quality."
     ]
