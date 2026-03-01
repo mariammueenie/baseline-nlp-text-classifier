@@ -63,7 +63,7 @@ The model distinguishes domain-specific vocabulary effectively despite its simpl
 
 Below is a sample run of the classifier including metrics and top indicative terms.
 
-![Model Results](images/results-output.png)
+![Model Results](images/results-chart.png)
 
 ---
 
